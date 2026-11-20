@@ -1,0 +1,34 @@
+name: Gauntlet CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  package-isolation:
+    name: Enforce Single-Package Isolation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify worker PR touches at most one packages/env-XXX directory
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          PR_LABELS: ${{ toJson(github.event.pull_request.labels.*.name) }}
+        run: node scripts/check-isolation.ts
+
+  harness-and-oracles:
+    name: Core Harness & Reference Oracle Suite (Node 24 + SQLite WAL)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm test

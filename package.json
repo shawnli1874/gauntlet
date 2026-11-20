@@ -1,0 +1,16 @@
+{
+  "name": "gauntlet-bench",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Deterministic, air-gapped full-stack web sandboxes with dual SQL + DOM oracles for benchmarking browser agents.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "test": "node --test test/gauntlet.test.ts",
+    "check:isolation": "node scripts/check-isolation.ts",
+    "demo:001": "node packages/env-001-airline-seatmap/src/cli.ts"
+  }
+}
